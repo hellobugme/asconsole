@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>ASCONSOLE</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<style>
+	.output {
+		width: 550px;
+		height: 400px;
+		padding: 10px;
+		background-color: black;
+		color: white;
+		font-family: Arial;
+		overflow: auto;
+	}
+</style>
+<script>
+	var flashObj = null;
+	var outputNode = null;
+	var jsReady = false;
+	var asReady = false;
+
+	var connectStatus = "off";
+	function connectOn(){
+		if(asReady === false) return "ActionScript is not ready.";
+		if(connectStatus === "on") return "Already connect.";
+		connectStatus = "on";
+		flashObj.connect();
+		return "connectStatus: on";
+	}
+	function connectOff(){
+		if(asReady === false) return "ActionScript is not ready.";
+		if(connectStatus === "off") return "Already disconnect.";
+		connectStatus = "off";
+		flashObj.disconnect();
+		return "connectStatus: off";
+	}
+	var outputStatus = "on";
+	function outputOn(){
+		outputStatus = "on";
+		return "outputStatus: on";
+	}
+	function outputOff(){
+		outputStatus = "off";
+		return "outputStatus: off";
+	}
+
+	var outputCounter = 0;
+	function output() {
+		if(outputStatus === "off") return;
+		var msg = outputNode.innerHTML;
+		for(var i = 0, len = arguments.length; i < len; i++) {
+			outputCounter ++;
+			msg += String(outputCounter) + "&nbsp;&nbsp;" + arguments[i].toString() + "<br/>";
+		}
+		outputNode.innerHTML = msg;
+		outputNode.scrollTop = outputNode.scrollHeight;
+	}
+	function clearOutput(){
+		outputCounter = 0;
+		outputNode.innerHTML = "";
+		outputNode.scrollTop = 0;
+	}
+
+	var baseType = "undefined|boolean|string|number";
+	var instanceCounter = 0;
+	function logObject(){
+		var arg, argType, argName;
+		for(var i=0, len=arguments.length; i<len; i++) {
+			arg = arguments[i];
+			argType = typeof arg;
+			if(baseType.indexOf(argType)===-1) {
+				argName = arg["name"];
+				if(!argName) {
+					argName = "as_instance" + String(instanceCounter);
+					instanceCounter ++;
+				}
+				window[argName] = arg;
+				console.log("("+argName+")", arg);
+			} else {
+				console.log(arg);
+			}
+		}
+	}
+	function isJsReady() {
+		return jsReady;
+	}
+	function pageInit() {
+		jsReady = true;
+		outputNode = $id("output");
+	}
+
+	function flashIsReady() {
+		asReady = true;
+		flashObj = $id("flashObj");
+		output("ActionScript is ready.");
+		output("Run \"connectOn()\" in console to connect.");
+	}
+
+	function $id(objName) {
+	    if (window.document[objName]) {
+	        return window.document[objName];
+	    } else if (navigator.appName.indexOf("Microsoft") == -1) {
+	        if (document.embeds && document.embeds[objName]) {
+	            return document.embeds[objName];
+	        } else {
+	            return document.getElementById(objName);
+	        }
+	    }
+	}
+</script>
+</head>
+<body onload="pageInit();">
+	<div id="output" class="output"></div>
+	<object id="flashObj" name="flashObj" 
+type="application/x-shockwave-flash" data="asconsole.swf?v=1" width="0" height="0">
+		<param name="movie" value="asconsole.swf?v=1">
+		<param name="quality" value="high">
+		<param name="allowScriptAccess" value="always" />
+		<embed src="asconsole.swf?v=1" name="flashObj" id="flashObj" quality="high" allowScriptAccess="always" swLiveConnect="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"  width="0" height="0" />
+	</object>
+</body>
+</html>
