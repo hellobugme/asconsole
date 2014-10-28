@@ -43,32 +43,39 @@
 			conn.allowDomain("localhost");
 			conn.client = this;
 		}
-		public function connect():void
+		public function connect():String
 		{
-			if (connectStatus !== "disconnected") return;
+			if (connectStatus !== "disconnected") return "Already connected.";
 			if (! conn) initLocalConnection();
 			connectStatus = "connecting";
+			var msg:String;
 			try {
 				conn.connect("_asconsole");
 				connectStatus = "connected";
-				allOutput("LocalConnection connect, domain : " + conn.domain + ".");
+				callBrowser("connectSuccess");
+				msg = "LocalConnection connect, domain : " + conn.domain + ".";
 			} catch (error:ArgumentError) {
 				connectStatus = "disconnected";
-				allOutput("Can't connect...the connection name is already being used by another SWF.");
+				msg = "Can't connect...the connection name is already being used by another SWF."
 			}
+			allOutput(msg);
+			return msg;
 		}
-		public function disconnect():void
+		public function disconnect():String
 		{
-			if (connectStatus !== "connected") return;
-			if (! conn) return;
+			if (connectStatus !== "connected") return "Already disconnected.";
+			if (! conn) return "Already disconnected.";
+			var msg:String;
 			try {
 				connectStatus = "disconnected";
 				conn.close();
-				allOutput("LocalConnection disconnect.");
+				msg = "LocalConnection disconnect.";
 			} catch (error:ArgumentError) {
 				connectStatus = "disconnected";
-				allOutput("LocalConnection close failed.");
+				msg = "LocalConnection close failed.";
 			}
+			allOutput(msg);
+			return msg;
 		}
 		public function destroy():void 
 		{

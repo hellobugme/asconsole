@@ -23,12 +23,21 @@
 			var txtfmt:TextFormat = new TextFormat("Arial", 12);
 			
 			const hPadding:uint = 5;
+
 			// messageLabel
 			messageLabel = new TextField();
 			messageLabel.defaultTextFormat = txtfmt;
 			messageLabel.x = 10;
+			messageLabel.y = 38;
+			messageLabel.text = "Click text area to send :";
+			messageLabel.autoSize = TextFieldAutoSize.LEFT;
+			addChild(messageLabel);
+
+			messageLabel = new TextField();
+			messageLabel.defaultTextFormat = txtfmt;
+			messageLabel.x = 10;
 			messageLabel.y = 10;
-			messageLabel.text = "Text to send:";
+			messageLabel.text = "Input text to send :";
 			messageLabel.autoSize = TextFieldAutoSize.LEFT;
 			addChild(messageLabel);
 
@@ -64,7 +73,7 @@
 			sendBtn.addEventListener(MouseEvent.CLICK, sendMessage);
 			
 			// demoTxt
-			var nextY:int = 40;
+			var nextY:int = 60;
 			for(var i:int=0, len=demoDescs.length; i<len; ++i) {
 				var txt:TextField = new TextField();
 				txt.defaultTextFormat = txtfmt;

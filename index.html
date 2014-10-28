@@ -27,17 +27,17 @@
 	var connectStatus = "off";
 	function connectOn(){
 		if(asReady === false) return "ActionScript is not ready.";
-		if(connectStatus === "on") return "Already connect.";
+		if(connectStatus === "on") return "Already connected.";
+		return flashObj.connect();
+	}
+	function connectSuccess(){
 		connectStatus = "on";
-		flashObj.connect();
-		return "connectStatus: on";
 	}
 	function connectOff(){
 		if(asReady === false) return "ActionScript is not ready.";
-		if(connectStatus === "off") return "Already disconnect.";
+		if(connectStatus === "off") return "Already disconnected.";
 		connectStatus = "off";
-		flashObj.disconnect();
-		return "connectStatus: off";
+		return flashObj.disconnect();
 	}
 	var outputStatus = "on";
 	function outputOn(){
@@ -97,6 +97,9 @@
 	function flashIsReady() {
 		asReady = true;
 		flashObj = $id("flashObj");
+		if(flashObj.length) {
+			flashObj = flashObj[0];
+		}
 		output("ActionScript is ready.");
 		output("Run \"connectOn()\" in console to connect.");
 	}
