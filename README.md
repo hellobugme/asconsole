@@ -1,12 +1,14 @@
 # asconsole
 
-Debug Flash/ActionScript by browser's console.
+Debug Flash/ActionScript by browser's console.<br/>
 Debug webpage/JavaScript in different tabpages or browsers.
 
 * Author : Kainan Hong <<1037714455@qq.com>>
 * Demo   : Receiver : http://hellobug.me/play/asconsole/
            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           Sender : http://hellobug.me/play/asconsole/demo/
+           AsSender : http://hellobug.me/play/asconsole/asdemo/
+           <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           JsSender : http://hellobug.me/play/asconsole/jsdemo/
 * Source : https://github.com/hellobugme/asconsole/
 
 ## Features
@@ -45,6 +47,7 @@ package {
     }
   }
 }
+```
 
 ## asconsole.js Example
 
@@ -68,3 +71,4 @@ package {
 </script>
 </body>
 </html>
+```
