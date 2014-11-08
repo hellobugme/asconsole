@@ -59,6 +59,7 @@ package {
 <body>
 <script src="asconsole.js"></script>
 <script>
+  // asconsole.setMoviePath("asconsole.js.swf");
   asconsole.init();
   asconsole.log('一颗红心向太阳','吼吼~');
   asconsole.info('楼上药不能停！');

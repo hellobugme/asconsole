@@ -13,8 +13,11 @@
 var asconsole = window.asconsole || {};
 asconsole.isAsReady = false;
 asconsole.todoList = [];
-asconsole.init = function(container, width, height){
-    asconsole.client = new AsConsole(container, width, width);
+asconsole.setMoviePath = function(path){
+	AsConsole.moviePath = path;
+}
+asconsole.init = function(container, movieWidth, movieHeight){
+    asconsole.client = new AsConsole(container, movieWidth, movieHeight);
     asconsole.client.init();
 };
 asconsole.log = function(){
@@ -147,7 +150,7 @@ var AsConsole = function(container, movieWidth, movieHeight){
         return AsConsole.instance;
     }
 
-    this.moviePath = "asconsole.js.swf";
+    this.moviePath = AsConsole.moviePath;
     this.movieId = "asconsole_" + AsConsole.instanceCounter;
     this.movieHandle = null;
     this.container = container || document.getElementsByTagName("body")[0];
@@ -160,6 +163,7 @@ var AsConsole = function(container, movieWidth, movieHeight){
     AsConsole.instance = this;
 };
 
+AsConsole.moviePath = "asconsole.js.swf";
 AsConsole.instanceCounter = 0;
 
 AsConsole.prototype = {
