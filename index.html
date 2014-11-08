@@ -76,16 +76,35 @@
 			if(baseType.indexOf(argType)===-1) {
 				argName = arg["name"];
 				if(!argName) {
-					argName = "as_instance" + String(instanceCounter);
+					argName = "inst" + String(instanceCounter);
 					instanceCounter ++;
 				}
 				window[argName] = arg;
-				console.log("("+argName+")", arg);
+				console.log("("+argName+")\n", arg);
 			} else {
 				console.log(arg);
 			}
 		}
 	}
+
+	function parseStringToHTML(param) {
+		var ret;
+		if(typeof(param) === "string"){
+			ret = document.createElement("log_node");
+			ret.innerHTML = param;
+			ret = ret.childNodes[0];
+		} else {
+			ret = param;
+		}
+		return ret;
+	}
+	function logHTMLElement(){
+		for(var i=0,len=arguments.length; i<len; i++){
+			arguments[i] = parseStringToHTML(arguments[i]);
+		}
+		logObject.apply(null, arguments);
+	}
+
 	function isJsReady() {
 		return jsReady;
 	}

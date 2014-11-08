@@ -106,7 +106,7 @@
 			"输出对象类型:\nconsole.log(this.toString());\nconsole.log(getQualifiedClassName(this));",
 			"包含格式化指令的信息:\nconsole.log('%chello world','font-size:25px;color:red;');",
 			"包含格式化指令的信息:\nconsole.log('%chello world', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');",
-			"log图片:\nconsole.log('%c', \"padding:50px 300px;line-height:120px;background:url('http://wayou.github.io/2014/09/10/chrome-console-tips-and-tricks/rabbit.gif') no-repeat;\");", 
+			"输出图片:\nconsole.log('%c', \"padding:50px 300px;line-height:120px;background:url('http://s1.homezz.com/201411/7031/48070_o.gif') no-repeat;\");", 
 			"清空控制台:\nconsole.clear();"
 		];
 		private var demoFns:Array = [
@@ -134,7 +134,7 @@
 				console.log('%chello world', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');
 			},
 			function(){
-				console.log("%c", "padding:50px 300px;line-height:120px;background:url('http://wayou.github.io/2014/09/10/chrome-console-tips-and-tricks/rabbit.gif') no-repeat;");
+				console.log("%c", "padding:50px 300px;line-height:120px;background:url('http://s1.homezz.com/201411/7031/48070_o.gif') no-repeat;");
 			},
 			function(){
 				console.clear();

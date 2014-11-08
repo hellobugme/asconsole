@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>ASCONSOLE.JS DEMO</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<style>
+	.textarea {
+		background-color: #cccccc;
+		margin-top: 8px;
+		padding: 4px;
+		word-wrap: break-word; 
+	}
+</style>
+</head>
+<body>
+<div>Input text to send : <input id="input" type="input" /><input id="sendBtn" type="button" value="Send" /></div>
+<div>
+	<div>Click text area to send :</div>
+	<div id="logInfo" class="textarea">
+		几个类型的信息:<br/>
+		asconsole.log('一颗红心向太阳','吼吼~');<br/>
+		asconsole.info('楼上药不能停！');<br/>
+		asconsole.warn('楼上嘴太贱！');<br/>
+		asconsole.error('楼上关你毛事？');
+	</div>
+	<div id="logDom" class="textarea">
+		输出DOM元素:<br/>
+		var node = document.getElementById("movieContainer");<br/>
+		asconsole.log(node);
+	</div>
+	<div id="logObj" class="textarea">
+		输出对象:<br/>
+		var obj = {<br/>
+			a:1,<br/>
+			b:"b",<br/>
+			c:[5, 6]<br/>
+		};<br/>
+		asconsole.log(obj);<br/>
+		asconsole.logObjectAsString(obj);
+	</div>
+	<div id="logTable" class="textarea">
+		表格形式输出数据:<br/>
+		var data = [{'品名': '杜雷斯', '数量': 4}, {'品名': '冈本', '数量': 3}];<br/>
+		asconsole.table(data);
+	</div>
+	<div id="logGroup" class="textarea">
+		分组输出:<br/>
+		asconsole.group("groupDemo");<br/>
+		for(var i=0; i<10; i++){<br/>
+			asconsole.log(Math.random());<br/>
+		}<br/>
+		asconsole.groupEnd();
+	</div>
+	<div id="logStyle1" class="textarea">
+		包含格式化指令的信息:<br/>
+		asconsole.log('%chello world','font-size:25px;color:red;');
+	</div>
+	<div id="logStyle2" class="textarea">
+		包含格式化指令的信息:<br/>
+		asconsole.log('%chello world', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');
+	</div>
+	<div id="logImg" class="textarea">
+		输出图片:<br/>
+		asconsole.log("%c", "padding:50px 300px;line-height:120px;background:url('http://s1.homezz.com/201411/7031/48070_o.gif') no-repeat;");
+	</div>
+	<div id="clear" class="textarea">
+		清空控制台:<br/>
+		asconsole.clear();
+	</div>
+</div>
+<div id="movieContainer"></div>
+<script src="asconsole.js"></script>
+<script>
+	var container = document.getElementById("movieContainer");
+	asconsole.init(container, 0, 0);
+	
+	function $id (divId) {
+		return document.getElementById(divId);
+	}
+	$id("sendBtn").onclick = function(){
+		asconsole.log($id("input").value);
+	};
+	$id("logInfo").onclick = function(){
+		asconsole.log('一颗红心向太阳','吼吼~');
+		asconsole.info('楼上药不能停！');
+		asconsole.warn('楼上嘴太贱！');
+		asconsole.error('楼上关你毛事？');
+	};
+	$id("logDom").onclick = function(){
+		var node = $id("movieContainer");
+		asconsole.log(node);
+	};
+	$id("logObj").onclick = function(){
+		var obj = {
+			a:1,
+			b:"b",
+			c:[5, 6]
+		};
+		asconsole.log(obj);
+		asconsole.logObjectAsString(obj);
+	};
+	$id("logTable").onclick = function(){
+		var data = [{'品名': '杜雷斯', '数量': 4}, {'品名': '冈本', '数量': 3}];
+		asconsole.table(data);
+	};
+	$id("logGroup").onclick = function(){
+		asconsole.group("groupDemo");
+		for(var i=0; i<10; i++){
+			asconsole.log(Math.random());
+		}
+		asconsole.groupEnd();
+	};
+	$id("logStyle1").onclick = function(){
+		asconsole.log('%chello world','font-size:25px;color:red;');
+	};
+	$id("logStyle2").onclick = function(){
+		asconsole.log('%chello world', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');
+	};
+	$id("logImg").onclick = function(){
+		asconsole.log("%c", "padding:50px 300px;line-height:120px;background:url('http://s1.homezz.com/201411/7031/48070_o.gif') no-repeat;");
+	};
+	$id("clear").onclick = function(){
+		asconsole.clear();
+	};
+</script>
+</body>
+</html>

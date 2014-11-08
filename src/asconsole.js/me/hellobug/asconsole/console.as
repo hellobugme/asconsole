@@ -5,6 +5,10 @@
 
 	public class console
 	{
+		// 打印DOM节点
+		static public function logHTMLElement(...rest):void {
+			callBrowser.apply(null, ["logHTMLElement"].concat(rest));
+		}
 		// 打印对象
 		static public function logObject(...rest):void {
 			callBrowser.apply(null, ["logObject"].concat(rest));
