@@ -15,7 +15,7 @@ asconsole.isAsReady = false;
 asconsole.todoList = [];
 asconsole.setMoviePath = function(path){
 	AsConsole.moviePath = path;
-}
+};
 asconsole.init = function(container, movieWidth, movieHeight){
     asconsole.client = new AsConsole(container, movieWidth, movieHeight);
     asconsole.client.init();
@@ -27,35 +27,35 @@ asconsole.log = function(){
 asconsole.info = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["info"].concat(argArr));
-}
+};
 asconsole.error = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["error"].concat(argArr));
-}
+};
 asconsole.warn = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["warn"].concat(argArr));
-}
+};
 asconsole.group = function(groupName){
     asconsole.callAsConsole("group", groupName);
-}
+};
 asconsole.groupEnd = function(){
     asconsole.callAsConsole("groupEnd");
-}
+};
 asconsole.clear = function(){
     asconsole.callAsConsole("clear");
-}
+};
 asconsole.table = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["table"].concat(argArr));
-}
+};
 asconsole.logObjectAsString = function(){
     for(var i=0,len=arguments.length; i<len; i++){
         arguments[i] = asconsole.obj2string(arguments[i]);
     }
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["log"].concat(argArr));
-}
+};
 
 asconsole.callAsConsole = function(){
     if(!asconsole.isAsReady){
@@ -104,7 +104,7 @@ asconsole.callAsConsole = function(){
         argumentsStr += ", arguments[" + i + "]";
     }
     eval("asconsole.client.movieHandle.callAsConsole(command" + argumentsStr + ");");
-}
+};
 asconsole.obj2string = function(o){
     if(!o) return o;
 
@@ -130,10 +130,10 @@ asconsole.obj2string = function(o){
         return r;
     }
     return o.toString();
-}
+};
 asconsole.isArray = function(obj) {  
     return Object.prototype.toString.call(obj) === "[object Array]";   
-}
+};
 
 asconsole.asReady = function(){
     asconsole.isAsReady = true;
@@ -141,7 +141,7 @@ asconsole.asReady = function(){
         asconsole.callAsConsole.apply(null, asconsole.todoList[i]);
     }
     asconsole.todoList.length = 0;
-}
+};
 
 
 // AsConsole
@@ -185,30 +185,31 @@ AsConsole.prototype = {
         var html = '';
         var flashvars = 'id=' + this.movieId + '&width=' + this.movieWidth + '&height=' + this.movieHeight;
 
-        if (navigator.userAgent.match(/MSIE/)) {
+        if (navigator.userAgent.match(/MSIE/) || window.ActiveXObject !== undefined) {
             // IE gets an OBJECT tag
-            var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
-            html = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + this.movieWidth + '" height="' + this.movieHeight + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + this.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+            // var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
+            // html = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + this.movieWidth + '" height="' + this.movieHeight + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + this.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+            html = '<embed id="' + this.movieId + '" src="' + this.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + this.movieWidth + '" height="' + this.movieHeight + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
         } else {
-            if(window.ActiveXObject !== undefined){
-                // still IE
-                html = '<embed id="' + this.movieId + '" src="' + this.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + this.movieWidth + '" height="' + this.movieHeight + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
-            } else {
-                // all other browsers get an EMBED tag
-                html = '<object id="' + this.movieId + '" name="' + this.movieId + '" type="application/x-shockwave-flash" data="' + this.moviePath + '" width="' + this.movieWidth + '" height="' + this.movieHeight + '"><param name="movie" value="' + this.moviePath + '"><param name="quality" value="low"><param name="allowScriptAccess" value="always" /><embed src="' + this.moviePath + '" name="' + this.movieId + '" id="' + this.movieId + '" quality="low" allowScriptAccess="always" swLiveConnect="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"  width="' + this.movieWidth + '" height="' + this.movieHeight + '" /></object>';
-            }
+            // all other browsers get an EMBED tag
+            html = '<object id="' + this.movieId + '" name="' + this.movieId + '" type="application/x-shockwave-flash" data="' + this.moviePath + '" width="' + this.movieWidth + '" height="' + this.movieHeight + '"><param name="movie" value="' + this.moviePath + '"><param name="quality" value="low"><param name="allowScriptAccess" value="always" /><embed src="' + this.moviePath + '" name="' + this.movieId + '" id="' + this.movieId + '" quality="low" allowScriptAccess="always" swLiveConnect="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"  width="' + this.movieWidth + '" height="' + this.movieHeight + '" /></object>';
         }
         return html;
     },
     getMovieHandle: function() {
+        var obj = null;
         if (window.document[this.movieId]) {
-            return window.document[this.movieId];
+            obj = window.document[this.movieId];
         } else if (navigator.appName.indexOf("Microsoft") == -1) {
             if (document.embeds && document.embeds[this.movieId]) {
-                return document.embeds[this.movieId];
+                obj = document.embeds[this.movieId];
             } else {
-                return document.getElementById(this.movieId);
+                obj = document.getElementById(this.movieId);
             }
         }
+        if(obj.length && obj[0]){
+            obj = obj[0];
+        }
+        return obj;
     }
 };

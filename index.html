@@ -116,23 +116,25 @@
 	function flashIsReady() {
 		asReady = true;
 		flashObj = $id("flashObj");
-		if(flashObj.length) {
-			flashObj = flashObj[0];
-		}
 		output("ActionScript is ready.");
 		output("Run \"connectOn()\" in console to connect.");
 	}
 
 	function $id(objName) {
+		var obj = null;
 	    if (window.document[objName]) {
-	        return window.document[objName];
+	        obj = window.document[objName];
 	    } else if (navigator.appName.indexOf("Microsoft") == -1) {
 	        if (document.embeds && document.embeds[objName]) {
-	            return document.embeds[objName];
+	            obj = document.embeds[objName];
 	        } else {
-	            return document.getElementById(objName);
+	            obj = document.getElementById(objName);
 	        }
 	    }
+	    if(obj.length && obj[0]){
+	    	obj = obj[0];
+	    }
+	    return obj;
 	}
 </script>
 </head>

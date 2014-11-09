@@ -2,12 +2,15 @@
 {
 	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
+	import flash.system.Security;
+	import flash.utils.setTimeout;
 	import me.hellobug.asconsole.console;
 
 	public class AsConsoleJsMain extends Sprite
 	{
 		public function AsConsoleJsMain()
 		{
+			Security.allowDomain("*");
 			initToJs();
 		}
 
@@ -19,9 +22,7 @@
 		{
 			if (ExternalInterface.available) {
 				try {
-					ExternalInterface.addCallback("callAsConsole", callAsConsole);
-					// ExternalInterface.call("console.log", "As console ready");
-					ExternalInterface.call("asconsole.asReady");
+					setTimeout(jsReadyTodo, 500);
 				} catch (error:SecurityError) {
 					console.error("A SecurityError occurred: " + error.message);
 				} catch (error:Error) {
@@ -30,6 +31,12 @@
 			} else {
 				console.error("External interface is not available for this container.");
 			}
+		}
+
+		private function jsReadyTodo():void {
+			ExternalInterface.addCallback("callAsConsole", callAsConsole);
+			// ExternalInterface.call("console.log", "As console ready");
+			ExternalInterface.call("asconsole.asReady");
 		}
 	}
 }

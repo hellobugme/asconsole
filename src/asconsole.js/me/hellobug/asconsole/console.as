@@ -62,6 +62,7 @@
 		}
 
 		static private var conn:LocalConnection;
+		static public var domain:String = "";
 		
 		static private function checkConn():void
 		{
@@ -69,6 +70,7 @@
 			{
 				conn = new LocalConnection();
 				conn.addEventListener(StatusEvent.STATUS, onStatus);
+				domain = conn.domain;
 				trace("domain : " + conn.domain);
 			}
 		}
