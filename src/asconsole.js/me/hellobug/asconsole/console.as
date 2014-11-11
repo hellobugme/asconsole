@@ -15,19 +15,19 @@
 		}
 		// 普通信息
 		static public function log(...rest):void {
-			callBrowser.apply(null, ["console.log"].concat(rest));
+			callBrowser.apply(null, ["asLog"].concat(rest));
 		}
 		// 提示类信息
 		static public function info(...rest):void {
-			callBrowser.apply(null, ["console.info"].concat(rest));
+			callBrowser.apply(null, ["asInfo"].concat(rest));
 		}
 		// 错误信息
 		static public function error(...rest):void {
-			callBrowser.apply(null, ["console.error"].concat(rest));
+			callBrowser.apply(null, ["asError"].concat(rest));
 		}
 		// 警示信息
 		static public function warn(...rest):void {
-			callBrowser.apply(null, ["console.warn"].concat(rest));
+			callBrowser.apply(null, ["asWarn"].concat(rest));
 		}
 		// 开始分组
 		static public function group(groupName:String):void {

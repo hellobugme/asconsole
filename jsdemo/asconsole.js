@@ -24,6 +24,10 @@ asconsole.log = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["log"].concat(argArr));
 };
+asconsole.logObject = function(){
+    var argArr = Array.prototype.slice.call(arguments);
+    asconsole.callAsConsole.apply(null, ["logObject"].concat(argArr));
+};
 asconsole.info = function(){
     var argArr = Array.prototype.slice.call(arguments);
     asconsole.callAsConsole.apply(null, ["info"].concat(argArr));
@@ -63,6 +67,8 @@ asconsole.callAsConsole = function(){
         return;
     }
 
+    asconsole.fixFlash();
+
     arguments = Array.prototype.slice.call(arguments);
     var command = arguments.splice(0,1)[0];
     if(arguments.length===0){
@@ -70,35 +76,6 @@ asconsole.callAsConsole = function(){
         return;
     }
     
-    var arg, isDocument, isHTMLElement;
-    for(var i=0,len=arguments.length; i<len; i++){
-        arg = arguments[i];
-        isHTMLElement = false;
-        if(typeof(arg)==="object"){
-            isHTMLElement = arg.toString().indexOf("HTML") !== -1;
-            if(isHTMLElement){
-                command = "logHTMLElement";
-                isDocument = arg.toString().indexOf("HTMLDocument") !== -1;
-                if(isDocument){
-                    arg = arg.documentElement.outerHTML;
-                } else {
-                    arg = arg.outerHTML;
-                }
-                arg = arg.replace("<html>", "<log_html>").replace("<html ", "<log_html ").replace("</html>", "</log_html>");
-                arg = arg.replace("<head>", "<log_head>").replace("<head ", "<log_head ").replace("</head>", "</log_head>");
-                arg = arg.replace("<body>", "<log_body>").replace("<body ", "<log_body ").replace("</body>", "</log_body>");
-            } else {
-                if(command !== "table") {
-                    command = "logObject";
-                }
-            }
-        }
-        if(typeof(arg) === "function"){
-            arg = asconsole.obj2string(arg);
-        }
-        arguments[i] = arg;
-    }
-
     var argumentsStr = "";
     for(var i=0,len=arguments.length; i<len; i++){
         argumentsStr += ", arguments[" + i + "]";
@@ -212,4 +189,169 @@ AsConsole.prototype = {
         }
         return obj;
     }
+};
+
+//=========================================================
+asconsole.isFixedFlash = false;
+asconsole.debug = false;
+asconsole.fixFlash = function() {
+    if(asconsole.isFixedFlash) {
+        return;
+    }
+    if(asconsole.debug) {
+        console.log("flash fixed");
+    }
+    asconsole.isFixedFlash = true;
+
+    window.__flash__functionToXML = function(obj, prop) {
+        if(!prop){
+            return __flash__toXML(asconsole.obj2string(obj));
+        }
+        var s = "<object>";
+        s += "<property id=\"__type__\">" + __flash__toXML("function") + "</property>";
+        s += "<property id=\"code\">" + __flash__toXML(asconsole.obj2string(obj)) + "</property>";
+        return s + "</object>";
+    };
+
+    window.__flash__arrayToXML = function(obj) {
+        if(asconsole.debug) {
+            console.group("__flash__arrayToXML");
+            console.log("[arguments obj]", obj);
+            console.groupEnd();
+        }
+        var s = "<array>";
+        for (var i=0; i<obj.length; i++) {
+            s += "<property id=\"" + i + "\">" + __flash__toXML(obj[i]) + "</property>";
+        }
+        if(asconsole.debug) {
+            console.group("__flash__arrayToXML");
+            console.log("[return]", s+"</array>");
+            console.groupEnd();
+        }
+        return s+"</array>";
+    };
+
+    window.__flash__argumentsToXML = function(obj,index) {
+        if(asconsole.debug) {
+            console.group("__flash__argumentsToXML");
+            console.log("[arguments obj]", obj);
+            console.log("[arguments index]", index);
+            console.groupEnd();
+        }
+        var s = "<arguments>";
+        for (var i=index; i<obj.length; i++) {
+            s += __flash__toXML(obj[i]);
+        }
+        if(asconsole.debug) {
+            console.group("__flash__argumentsToXML");
+            console.log("[return]", s+"</arguments>");
+            console.groupEnd();
+        }
+        return s+"</arguments>";
+    };
+
+    window.__flash__objectToXML = function(obj) {
+        if(asconsole.debug) {
+            console.group("__flash__objectToXML");
+            console.log("[arguments obj]", obj);
+            console.groupEnd();
+        }
+
+        var s = "<object>";
+        for (var prop in obj) {
+            s += "<property id=\"" + prop + "\">" + __flash__toXML(obj[prop], prop) + "</property>";
+        }
+        if(asconsole.debug) {
+            console.group("__flash__objectToXML");
+            console.log("[return]", s+"</object>");
+            console.groupEnd();
+        }
+        return s+"</object>";
+    };
+
+    window.__flash__escapeXML = function(s) {
+        if(asconsole.debug) console.log("%c__flash__escapeXML", "font-weight: bold;");
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+    };
+
+    window.__flash__toXML = function(value, prop) {
+        if(asconsole.debug) {
+            console.group("__flash__toXML");
+            console.log("[arguments value]", value);
+            console.groupEnd();
+        }
+        var type = typeof(value);
+        if (type == "string") {
+            return "<string>" + __flash__escapeXML(value) + "</string>";
+        } else if (type == "undefined") {
+            return "<undefined/>";
+        } else if (type == "number") {
+            return "<number>" + value + "</number>";
+        } else if (value == null) {
+            return "<null/>";
+        } else if (type == "boolean") {
+            return value ? "<true/>" : "<false/>";
+        } else if (type == "function") {
+            return __flash__functionToXML(value, prop);
+        } else if (value instanceof Date) {
+            return "<date>" + value.getTime() + "</date>";
+        } else if (value instanceof Array) {
+            return __flash__arrayToXML(value);
+        } else if (type == "object") {
+            // 处理jQuery对象
+            if(value instanceof jQuery) {
+                return __flash__arrayToXML(value);
+            }
+            // 处理HTML对象
+            var type = Object.prototype.toString.call(value);
+            if(type === "[object HTMLDocument]") {
+                value = "[AsconsoleObject HTMLElement]" + value.documentElement.outerHTML;
+                value = value.replace("<html>", "<log_html>").replace("<html ", "<log_html ").replace("</html>", "</log_html>");
+                value = value.replace("<head>", "<log_head>").replace("<head ", "<log_head ").replace("</head>", "</log_head>");
+                value = value.replace("<body>", "<log_body>").replace("<body ", "<log_body ").replace("</body>", "</log_body>");
+                return __flash__toXML(value);
+            } else if(type.indexOf("HTML") && value["outerHTML"]) {
+                value = "[AsconsoleObject HTMLElement]" + value.outerHTML;
+                return __flash__toXML(value);
+            }
+
+            return __flash__objectToXML(value);
+        } else {
+            return "<null/>"; //???
+        }
+    };
+    window.__flash__request = function(name) {
+        if(asconsole.debug) {
+            console.group("__flash__request");
+            console.log("[arguments name]", name);
+            console.groupEnd();
+        }
+        var ret = "<invoke name=\""+name+"\" returntype=\"javascript\">" + __flash__argumentsToXML(arguments,1) + "</invoke>";
+        if(asconsole.debug) {
+            console.group("__flash__request");
+            console.log("[return]", ret);
+            console.groupEnd();
+        }
+        return ret;
+    };
+    window.__flash__addCallback = function(instance, name) {
+        if(asconsole.debug) {
+            console.group("__flash__addCallback");
+            console.log("[arguments instance]", instance);
+            console.log("[arguments name]", name);
+            console.groupEnd();
+        }
+        instance[name] = function () { 
+            return eval(instance.CallFunction("<invoke name=\""+name+"\" returntype=\"javascript\">" + __flash__argumentsToXML(arguments,0) + "</invoke>"));
+        };
+    };
+    window.__flash__removeCallback = function(instance, name) {
+        if(asconsole.debug) {
+            console.group("__flash__removeCallback");
+            console.log("[arguments instance]", instance);
+            console.log("[arguments name]", name);
+            console.groupEnd();
+        }
+        instance[name] = null;
+    };
 };
