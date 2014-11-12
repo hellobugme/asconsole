@@ -17,6 +17,11 @@
 		public function callAsConsole(methodName:String, ...rest):void {
 			console[methodName].apply(null, rest);
 		}
+
+		public function callBrowser(command:String, ...rest):void
+		{
+			console.callBrowser.apply(null, [command].concat(rest));
+		}
 		
 		private function initToJs():void
 		{
@@ -35,6 +40,7 @@
 
 		private function jsReadyTodo():void {
 			ExternalInterface.addCallback("callAsConsole", callAsConsole);
+			ExternalInterface.addCallback("callBrowser", callBrowser);
 			// ExternalInterface.call("console.log", "As console ready");
 			ExternalInterface.call("asconsole.asReady");
 		}
