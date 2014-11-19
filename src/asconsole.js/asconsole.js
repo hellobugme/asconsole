@@ -162,10 +162,12 @@ AsConsole.prototype = {
         var html = '';
         var flashvars = 'id=' + this.movieId + '&width=' + this.movieWidth + '&height=' + this.movieHeight;
 
-        if (navigator.userAgent.match(/MSIE/) || window.ActiveXObject !== undefined) {
+        if (navigator.userAgent.match(/MSIE/)) {
             // IE gets an OBJECT tag
-            // var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
-            // html = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + this.movieWidth + '" height="' + this.movieHeight + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + this.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+            var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
+            html = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + this.movieWidth + '" height="' + this.movieHeight + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + this.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+        } else if(window.ActiveXObject !== undefined) {
+            // still IE...
             html = '<embed id="' + this.movieId + '" src="' + this.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + this.movieWidth + '" height="' + this.movieHeight + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
         } else {
             // all other browsers get an EMBED tag
